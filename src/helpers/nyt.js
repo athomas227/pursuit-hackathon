@@ -1,4 +1,4 @@
-// src/nyt.js
+import { curateContent } from './gemini';
 import axios from 'axios';
 
 // Retrieve the API key from environment variables
@@ -13,7 +13,8 @@ export const fetchArticles = async (query) => {
         'api-key': NYT_API_KEY,  
       },
     });
-    return response.data;
+    console.log(response.data.response.docs); 
+    await curateContent(response.data.response.docs)
   } catch (error) {
     console.error("Error fetching articles:", error); 
     throw error;

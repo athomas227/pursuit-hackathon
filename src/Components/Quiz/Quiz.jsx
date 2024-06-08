@@ -52,7 +52,7 @@ export default function Quiz() {
 
     try {
         const articles = await fetchArticles(query); // Fetch articles based on the mood
-        console.log("API Response:", articles); 
+        // console.log("API Response:", articles); 
 
     } catch (error) {
         console.error("Error fetching article: ", error);
