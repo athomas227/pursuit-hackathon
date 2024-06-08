@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { fetchArticles } from "../../helpers/nyt";
-// 1. Build a list of synonyms based on semantic relation
-// 2. Create a function that gets two random words in the moodSynonyms array
-// 3. Use useEffect to only update the random words on mount
-// 4. Create a function to handle responses, which sets the quiz answers to the user selected keywords in state
-// 5. Create a submit handler to send the semantic key related to the keywords to the api for the request
+import { useNavigate } from "react-router-dom";
 
 export default function Quiz() {
   const [answers, setAnswers] = useState({});
@@ -19,8 +15,7 @@ export default function Quiz() {
     productive: ["Productive", "Efficient", "Focused", "Motivated"]
   };
 
-    // why am I shuffling like this?
-    // Fisher-Yates Shuffle: runs on O(n) time, equal probability 
+  // Fisher-Yates Shuffle: runs on O(n) time, equal probability 
   const getRandomWords = (words, count) => {
     const shuffled = [...words];
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -52,27 +47,40 @@ export default function Quiz() {
 
     try {
         const articles = await fetchArticles(query); // Fetch articles based on the mood
-        console.log("API Response:", articles); 
+        console.log("API Response:", articles);
 
     } catch (error) {
         console.error("Error fetching article: ", error);
     }
   };
 
+  const moodToColorClass = {
+    positive: "hover:bg-positiveHover",
+    negative: "hover:bg-negativeHover",
+    energetic: "hover:bg-energeticHover",
+    neutral: "hover:bg-neutralHover",
+    productive: "hover:bg-productiveHover"
+  };
+
   return (
-    <div>
+    <div className="text-center bg-black bg-opacity-40 rounded-2xl mt-16">
       <br />
-      <h3>How are you feeling today?</h3>
-      <br />
-      {Object.entries(randomWords).map(([mood, words]) => (
-        <div key={mood}>
-          <button onClick={() => responseHandler(mood)}>
-            {words.join(" & ")}
-          </button>
-        </div>
-      ))}
-      <br />
-      <button onClick={submitHandler}>Submit</button>
+      <div className="pl-7 pr-7 pb-5">
+        <h3 className="text-xl text-white">How are you feeling today?</h3>
+        <br />
+        {Object.entries(randomWords).map(([mood, words]) => (
+          <div key={mood}>
+            <button
+              className={`mb-1 shadow-outline-white rounded-xl px-3 py-2 ${moodToColorClass[mood]}`}
+              onClick={() => responseHandler(mood)}
+            >
+              {words.join(" & ")}
+            </button>
+          </div>
+        ))}
+        <br />
+        <button className="bg-transparent border-white text-white font-bold shadow-outline-white rounded-xl px-3 py-2" onClick={submitHandler}>Submit</button>
+      </div>
     </div>
   );
 }

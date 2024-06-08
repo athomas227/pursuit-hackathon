@@ -10,8 +10,8 @@ function App() {
     <div>
       <Router>
         <Navbar />
-        <Link to='/'>Home</Link>
-        <Link to="/quiz">Quiz</Link>
+        <Link to='/'></Link>
+        <Link to="/quiz"></Link>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path='/quiz' element={<Quiz />} />
