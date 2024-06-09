@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import { fetchArticles } from "../../helpers/nyt";
 import { curateContent } from "../../helpers/gemini";
+import { fetchPhotos } from "../../helpers/pexels";
 import { useNavigate } from "react-router-dom";
 import { ArticleContext } from "../../helpers/ArticleContext";
+import Loading from "../Loading/Loading";
 
 export default function Quiz() {
   const [answers, setAnswers] = useState({});
   const [randomWords, setRandomWords] = useState({});
   const { setArticle } = useContext(ArticleContext);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   // List of synonyms based on semantic relation
@@ -19,6 +22,7 @@ export default function Quiz() {
     productive: ["Productive", "Efficient", "Focused", "Motivated"]
   };
 
+  // why am I shuffling like this?
   // Fisher-Yates Shuffle: runs on O(n) time, equal probability 
   const getRandomWords = (words, count) => {
     const shuffled = [...words];
@@ -47,14 +51,26 @@ export default function Quiz() {
   const submitHandler = async () => {
     console.log("User answers:", answers);
     const selectedMood = Object.keys(answers)[0];
+
+    if (!selectedMood) {
+      alert("WHOA WHOA, what's the vibe?");
+      return;
+    }
+
     const query = selectedMood;
 
     try {
-        const articles = await fetchArticles(query);
+      setLoading(true);
+        const articles = await fetchArticles(query); // Fetch articles based on the mood
         const curateArticles = await curateContent(articles)
         setArticle(curateArticles);
-        navigate('/board');
+        const photos = await fetchPhotos(query); // Fetch photos based on the mood
+        console.log("API Response:", articles);
+        console.log("API Response:", photos);
+        setLoading(false);
+        navigate("/board", { state: { articles, photos } });
     } catch (error) {
+        setLoading(false);
         console.error("Error fetching article: ", error);
     }
   };
@@ -68,24 +84,35 @@ export default function Quiz() {
   };
 
   return (
-    <div className="text-center bg-black bg-opacity-40 rounded-2xl mt-16">
-      <br />
-      <div className="pl-7 pr-7 pb-5">
-        <h3 className="text-xl text-white">How are you feeling today?</h3>
-        <br />
-        {Object.entries(randomWords).map(([mood, words]) => (
-          <div key={mood}>
+    <div>
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="text-center bg-black bg-opacity-40 rounded-2xl mt-16">
+          <br />
+          <div className="pl-7 pr-7 pb-5">
+            <h3 className="text-xl text-white">How are you feeling today?</h3>
+            <br />
+            {Object.entries(randomWords).map(([mood, words]) => (
+              <div key={mood}>
+                <button
+                  className={`mb-1 shadow-outline-white rounded-xl px-3 py-2 ${moodToColorClass[mood]}`}
+                  onClick={() => responseHandler(mood)}
+                >
+                  {words.join(" & ")}
+                </button>
+              </div>
+            ))}
+            <br />
             <button
-              className={`mb-1 shadow-outline-white rounded-xl px-3 py-2 ${moodToColorClass[mood]}`}
-              onClick={() => responseHandler(mood)}
+              className="bg-transparent border-white text-white font-bold shadow-outline-white rounded-xl px-3 py-2"
+              onClick={submitHandler}
             >
-              {words.join(" & ")}
+              Submit
             </button>
           </div>
-        ))}
-        <br />
-        <button className="bg-transparent border-white text-white font-bold shadow-outline-white rounded-xl px-3 py-2" onClick={submitHandler}>Submit</button>
-      </div>
+        </div>
+      )}
     </div>
   );
 }
