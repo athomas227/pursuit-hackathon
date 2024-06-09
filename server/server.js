@@ -29,7 +29,36 @@ app.get('/api/article-content', async (req, res) => {
   }
 });
 
+app.get('/spotify-auth', async (req, res) => {
+  const { code } = req.query;
+  const redirect_uri = `${process.env.CLIENT_URL}`;
+
+  try {
+    const tokenResponse = await axios.post('https://accounts.spotify.com/api/token', 
+      new URLSearchParams({
+        grant_type: 'authorization_code',
+        code,
+        redirect_uri,
+      }), {
+      headers: {
+        'Authorization': `Basic ${Buffer.from(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`).toString('base64')}`,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+
+    // In a real app, store refresh_token securely (database, encrypted cookie)
+    res.json({
+      access_token: tokenResponse.data.access_token,
+      expires_in: tokenResponse.data.expires_in
+    });
+  } catch (error) {
+    console.error('Spotify auth error:', error.response?.data || error.message);
+    res.status(500).json({ error: 'Failed to get Spotify token' });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
