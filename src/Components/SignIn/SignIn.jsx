@@ -5,7 +5,7 @@ export default function SignIn() {
         <div className="relative h-screen w-screen overflow-hidden">
             <video
                 className="absolute top-0 left-0 w-full h-full object-cover"
-                src="src/Components/Home/Untitled.mov"
+                src="src/Components/Home/Untitled2.mov"
                 autoPlay
                 muted
                 loop

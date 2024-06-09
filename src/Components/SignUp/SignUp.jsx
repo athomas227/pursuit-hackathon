@@ -23,14 +23,14 @@ export default function SignUp() {
         <div className="relative h-screen w-screen overflow-hidden">
             <video
                 className="absolute top-0 left-0 w-full h-full object-cover"
-                src="src/Components/Home/Untitled.mov"
+                src="src/Components/Home/Untitled1.mov"
                 autoPlay
                 muted
                 loop
             ></video>
-            <div className="absolute inset-0 bg-black opacity-50"></div>
+            <div className="absolute inset-0 bg-black opacity-30"></div>
             <div className="relative z-10 flex items-center justify-center h-full w-full">
-                <div class="justify-center px-6 py-8 lg:px-8 bg-black bg-opacity-40 rounded-2xl mt-16">
+                <div class="justify-center px-6 py-8 lg:px-8 bg-black bg-opacity-60 rounded-2xl mt-16">
                     <div class="sm:mx-auto sm:w-full sm:max-w-sm ">
                         <h2 class="mt-3 text-center text-2xl font-bold leading-9 tracking-tight text-white">Sign up for an account</h2>
                     </div>
