@@ -105,7 +105,7 @@ export default function Quiz() {
             ))}
             <br />
             <button
-              className="bg-transparent border-white text-white font-bold shadow-outline-white rounded-xl px-3 py-2"
+              className="bg-transparent border-white text-white font-bold shadow-outline-white rounded-xl px-3 py-2 hover:bg-black hover:bg-opacity-70"
               onClick={submitHandler}
             >
               Submit
