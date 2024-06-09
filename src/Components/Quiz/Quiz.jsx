@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { fetchArticles } from "../../helpers/nyt";
+import { curateContent } from "../../helpers/gemini";
 import { fetchPhotos } from "../../helpers/pexels";
 import { useNavigate } from "react-router-dom";
 // 1. Build a list of synonyms based on semantic relation
