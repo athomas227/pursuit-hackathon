@@ -12,7 +12,6 @@ app.get('/api/article-content', async (req, res) => {
     const page = await browser.newPage();
     await page.goto(url);
 
-    // Implement your scraping logic here to extract the article content and image
     const articleData = await page.evaluate(() => {
       // Find the first image element on the page
       const imageElement = document.querySelector('img');
