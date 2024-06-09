@@ -1,9 +1,27 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { ArticleContext } from "../../helpers/ArticleContext";
 import MoodArticleItem from '../Board/MoodArticleItem.jsx';
 
 const MoodBoard = () => {
   const { article } = useContext(ArticleContext);
+
+  useEffect(() => {
+    // ... existing code ...
+  
+    // Check for Spotify auth callback
+    const urlParams = new URLSearchParams(window.location.search);
+    const spotifyCode = urlParams.get('code');
+    if (spotifyCode) {
+      getSpotifyTokens(spotifyCode).then(data => {
+        setSpotifyToken(data.access_token);
+        // Remove the code from the URL to avoid issues on refresh
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }).catch(error => {
+        console.error("Error getting Spotify token:", error);
+        // Handle error, maybe show a message to the user
+      });
+    }
+  }, [article]);
 
   return (
     <div className="relative h-screen w-screen overflow-hidden">

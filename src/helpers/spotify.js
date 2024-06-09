@@ -59,3 +59,6 @@ const getSpotifyToken = async () => {
     const data = await response.json();
     return data[`${type}s`].items;
   };
+
+const client_id = process.env.SPOTIFY_CLIENT_ID;  // no REACT_APP_ prefix
+const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
