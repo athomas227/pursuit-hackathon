@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { fetchArticles } from "../../helpers/nyt";
+import { fetchPhotos } from "../../helpers/pexels";
 import { useNavigate } from "react-router-dom";
+// 1. Build a list of synonyms based on semantic relation
+// 2. Create a function that gets two random words in the moodSynonyms array
+// 3. Use useEffect to only update the random words on mount
+// 4. Create a function to handle responses, which sets the quiz answers to the user selected keywords in state
+// 5. Create a submit handler to send the semantic key related to the keywords to the api for the request
 
 export default function Quiz() {
   const [answers, setAnswers] = useState({});
@@ -15,6 +21,7 @@ export default function Quiz() {
     productive: ["Productive", "Efficient", "Focused", "Motivated"]
   };
 
+  // why am I shuffling like this?
   // Fisher-Yates Shuffle: runs on O(n) time, equal probability 
   const getRandomWords = (words, count) => {
     const shuffled = [...words];
@@ -47,7 +54,9 @@ export default function Quiz() {
 
     try {
         const articles = await fetchArticles(query); // Fetch articles based on the mood
-        // console.log("API Response:", articles);
+        const photos = await fetchPhotos(query); // Fetch photos based on the mood
+        console.log("API Response:", articles);
+        console.log("API Response:", photos);
 
     } catch (error) {
         console.error("Error fetching article: ", error);
