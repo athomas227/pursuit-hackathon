@@ -5,7 +5,7 @@ export default function Navbar() {
     return (
         <nav className="bg-transparent absolute top-0 left-0 w-full z-20">
             <div className="px-4 sm:px-6 lg:px-8 flex items-center justify-between py-4">
-                <Link to="/loading">
+                <Link to="/">
                 <img src="src/Components/Navbar/imageedit_10_7740665889.png" alt="logo" className="h-12 w-auto" />
                 </Link>
 
