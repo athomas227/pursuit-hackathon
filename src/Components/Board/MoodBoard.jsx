@@ -20,7 +20,7 @@ const MoodBoard = () => {
         <div className="bg-black bg-opacity-60 rounded-2xl mt-16 py-5 px-5">
         <div className="w-full max-w-lg text-white">
           {article && article.length > 0 && (
-            <MoodArticleItem article={article[0]} />
+              <MoodArticleItem article={article[0]} />
           )}
         </div>
       </div>
