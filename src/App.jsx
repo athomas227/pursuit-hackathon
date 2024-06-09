@@ -4,6 +4,7 @@ import Home from './Components/Home/Home'
 import Navbar from './Components/Navbar/Navbar'
 import Quiz from './Components/Quiz/Quiz'
 import Loading from './Components/Loading/Loading'
+import Board from './Components/Board/MoodBoard'
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path='/loading' element={<Loading />} />
           <Route path='/quiz' element={<Quiz />} />
+          <Route path='/board' element={<Board />} />
         </Routes>
       </Router>
     </div>

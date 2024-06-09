@@ -10,7 +10,7 @@ export default function Navbar() {
                 </Link>
 
                 <button className="bg-transparent border-white hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4">
-                    Sign in
+                    Sign Up
                 </button>
             </div>
         </nav>

@@ -3,6 +3,7 @@ import { fetchArticles } from "../../helpers/nyt";
 import { curateContent } from "../../helpers/gemini";
 import { fetchPhotos } from "../../helpers/pexels";
 import { useNavigate } from "react-router-dom";
+import Loading from "../Loading/Loading";
 // 1. Build a list of synonyms based on semantic relation
 // 2. Create a function that gets two random words in the moodSynonyms array
 // 3. Use useEffect to only update the random words on mount
@@ -12,6 +13,9 @@ import { useNavigate } from "react-router-dom";
 export default function Quiz() {
   const [answers, setAnswers] = useState({});
   const [randomWords, setRandomWords] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   // List of synonyms based on semantic relation
   const moodSynonyms = {
@@ -51,15 +55,24 @@ export default function Quiz() {
   const submitHandler = async () => {
     console.log("User answers:", answers);
     const selectedMood = Object.keys(answers)[0];
+
+    if (!selectedMood) {
+      alert("WHOA WHOA, what's the vibe?");
+      return;
+    }
+
     const query = selectedMood;
 
     try {
+      setLoading(true);
         const articles = await fetchArticles(query); // Fetch articles based on the mood
         const photos = await fetchPhotos(query); // Fetch photos based on the mood
         console.log("API Response:", articles);
         console.log("API Response:", photos);
-
+        setLoading(false);
+        navigate("/board", { state: { articles, photos } });
     } catch (error) {
+        setLoading(false);
         console.error("Error fetching article: ", error);
     }
   };
@@ -73,24 +86,35 @@ export default function Quiz() {
   };
 
   return (
-    <div className="text-center bg-black bg-opacity-40 rounded-2xl mt-16">
-      <br />
-      <div className="pl-7 pr-7 pb-5">
-        <h3 className="text-xl text-white">How are you feeling today?</h3>
-        <br />
-        {Object.entries(randomWords).map(([mood, words]) => (
-          <div key={mood}>
+    <div>
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="text-center bg-black bg-opacity-40 rounded-2xl mt-16">
+          <br />
+          <div className="pl-7 pr-7 pb-5">
+            <h3 className="text-xl text-white">How are you feeling today?</h3>
+            <br />
+            {Object.entries(randomWords).map(([mood, words]) => (
+              <div key={mood}>
+                <button
+                  className={`mb-1 shadow-outline-white rounded-xl px-3 py-2 ${moodToColorClass[mood]}`}
+                  onClick={() => responseHandler(mood)}
+                >
+                  {words.join(" & ")}
+                </button>
+              </div>
+            ))}
+            <br />
             <button
-              className={`mb-1 shadow-outline-white rounded-xl px-3 py-2 ${moodToColorClass[mood]}`}
-              onClick={() => responseHandler(mood)}
+              className="bg-transparent border-white text-white font-bold shadow-outline-white rounded-xl px-3 py-2"
+              onClick={submitHandler}
             >
-              {words.join(" & ")}
+              Submit
             </button>
           </div>
-        ))}
-        <br />
-        <button className="bg-transparent border-white text-white font-bold shadow-outline-white rounded-xl px-3 py-2" onClick={submitHandler}>Submit</button>
-      </div>
+        </div>
+      )}
     </div>
   );
 }
