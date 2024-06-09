@@ -1,20 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { fetchArticles } from "../../helpers/nyt";
 import { curateContent } from "../../helpers/gemini";
 import { fetchPhotos } from "../../helpers/pexels";
 import { useNavigate } from "react-router-dom";
+import { ArticleContext } from "../../helpers/ArticleContext";
 import Loading from "../Loading/Loading";
-// 1. Build a list of synonyms based on semantic relation
-// 2. Create a function that gets two random words in the moodSynonyms array
-// 3. Use useEffect to only update the random words on mount
-// 4. Create a function to handle responses, which sets the quiz answers to the user selected keywords in state
-// 5. Create a submit handler to send the semantic key related to the keywords to the api for the request
 
 export default function Quiz() {
   const [answers, setAnswers] = useState({});
   const [randomWords, setRandomWords] = useState({});
+  const { setArticle } = useContext(ArticleContext);
   const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
 
   // List of synonyms based on semantic relation
@@ -37,7 +33,7 @@ export default function Quiz() {
     return shuffled.slice(0, count);
   };
 
-  // useEffect to update random words on mount only
+ 
   useEffect(() => {
     const words = {};
     for (const [mood, moodWords] of Object.entries(moodSynonyms)) {
@@ -66,6 +62,8 @@ export default function Quiz() {
     try {
       setLoading(true);
         const articles = await fetchArticles(query); // Fetch articles based on the mood
+        const curateArticles = await curateContent(articles)
+        setArticle(curateArticles);
         const photos = await fetchPhotos(query); // Fetch photos based on the mood
         console.log("API Response:", articles);
         console.log("API Response:", photos);
