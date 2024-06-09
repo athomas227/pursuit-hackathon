@@ -62,7 +62,7 @@ export default function Quiz() {
     try {
       setLoading(true);
         const articles = await fetchArticles(query); // Fetch articles based on the mood
-        const curateArticles = await curateContent(articles)
+        const curateArticles = await curateContent(query, articles)
         setArticle(curateArticles);
         const photos = await fetchPhotos(query); // Fetch photos based on the mood
         console.log("API Response:", articles);
