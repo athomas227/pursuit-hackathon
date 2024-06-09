@@ -11,6 +11,7 @@ export default function Quiz() {
   const [randomWords, setRandomWords] = useState({});
   const { setArticle } = useContext(ArticleContext);
   const [loading, setLoading] = useState(false);
+  const [selectedMood, setSelectedMood] = useState(null);
   const navigate = useNavigate();
 
   // List of synonyms based on semantic relation
@@ -22,7 +23,6 @@ export default function Quiz() {
     productive: ["Productive", "Efficient", "Focused", "Motivated"]
   };
 
-  // why am I shuffling like this?
   // Fisher-Yates Shuffle: runs on O(n) time, equal probability 
   const getRandomWords = (words, count) => {
     const shuffled = [...words];
@@ -33,7 +33,6 @@ export default function Quiz() {
     return shuffled.slice(0, count);
   };
 
- 
   useEffect(() => {
     const words = {};
     for (const [mood, moodWords] of Object.entries(moodSynonyms)) {
@@ -46,6 +45,7 @@ export default function Quiz() {
     setAnswers({
       [mood]: randomWords[mood]
     });
+    setSelectedMood(mood);
   };
 
   const submitHandler = async () => {
@@ -70,8 +70,8 @@ export default function Quiz() {
         setLoading(false);
         navigate("/board");
     } catch (error) {
-        setLoading(false);
-        console.error("Error fetching article: ", error);
+      setLoading(false);
+      console.error("Error fetching article: ", error);
     }
   };
 
@@ -81,6 +81,14 @@ export default function Quiz() {
     energetic: "hover:bg-energeticHover",
     neutral: "hover:bg-neutralHover",
     productive: "hover:bg-productiveHover"
+  };
+
+  const selectedMoodToColorClass = {
+    positive: "bg-positiveHover",
+    negative: "bg-negativeHover",
+    energetic: "bg-energeticHover",
+    neutral: "bg-neutralHover",
+    productive: "bg-productiveHover"
   };
 
   return (
@@ -96,7 +104,7 @@ export default function Quiz() {
             {Object.entries(randomWords).map(([mood, words]) => (
               <div key={mood}>
                 <button
-                  className={`mb-1 shadow-outline-white rounded-xl px-3 py-2 ${moodToColorClass[mood]}`}
+                  className={`mb-1 shadow-outline-white rounded-xl px-3 py-2 ${selectedMood === mood ? selectedMoodToColorClass[mood] : moodToColorClass[mood]}`}
                   onClick={() => responseHandler(mood)}
                 >
                   {words.join(" & ")}

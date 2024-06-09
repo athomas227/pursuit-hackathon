@@ -31,7 +31,7 @@ export default function Navbar() {
         <nav className="bg-transparent absolute top-0 left-0 w-full z-20">
             <div className="px-4 sm:px-6 lg:px-8 flex items-center justify-between py-4">
                 <Link to="/">
-                <img src="src/Components/Navbar/imageedit_10_7740665889.png" alt="logo" className="h-12 w-auto" />
+                    <img src="src/Components/Navbar/imageedit_10_7740665889.png" alt="logo" className="h-12 w-auto" />
                 </Link>
 
                 {!isLoggedIn ? (
