@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { fetchArticles } from "../../helpers/nyt";
 import { curateContent } from "../../helpers/gemini";
 import { useNavigate } from "react-router-dom";
+import { ArticleContext } from "../../helpers/ArticleContext";
 
 export default function Quiz() {
   const [answers, setAnswers] = useState({});
   const [randomWords, setRandomWords] = useState({});
+  const { setArticle } = useContext(ArticleContext);
+  const navigate = useNavigate();
 
   // List of synonyms based on semantic relation
   const moodSynonyms = {
@@ -26,7 +29,7 @@ export default function Quiz() {
     return shuffled.slice(0, count);
   };
 
-  // useEffect to update random words on mount only
+ 
   useEffect(() => {
     const words = {};
     for (const [mood, moodWords] of Object.entries(moodSynonyms)) {
@@ -47,9 +50,10 @@ export default function Quiz() {
     const query = selectedMood;
 
     try {
-        const articles = await fetchArticles(query); // Fetch articles based on the mood
-        // console.log("API Response:", articles);
-
+        const articles = await fetchArticles(query);
+        const curateArticles = await curateContent(articles)
+        setArticle(curateArticles);
+        navigate('/board');
     } catch (error) {
         console.error("Error fetching article: ", error);
     }

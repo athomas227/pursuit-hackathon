@@ -13,8 +13,9 @@ export const fetchArticles = async (query) => {
         'api-key': NYT_API_KEY,  
       },
     });
-    console.log(response.data.response.docs); 
-    await curateContent(response.data.response.docs)
+    console.log(response.data.response.docs);
+    return response.data.response.docs
+    // await curateContent(response.data.response.docs)
   } catch (error) {
     console.error("Error fetching articles:", error); 
     throw error;
