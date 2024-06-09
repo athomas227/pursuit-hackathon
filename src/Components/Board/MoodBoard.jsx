@@ -8,7 +8,7 @@ const MoodBoard = () => {
   return (
     <div className="mood-board">
         {article && article.length > 0 && (
-        <MoodArticleItem article={article[0]} />
+          <MoodArticleItem article={article[0]} />
         )}
   </div>
   );

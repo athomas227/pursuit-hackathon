@@ -68,7 +68,7 @@ export default function Quiz() {
         console.log("API Response:", articles);
         console.log("API Response:", photos);
         setLoading(false);
-        navigate("/board", { state: { articles, photos } });
+        navigate("/board");
     } catch (error) {
         setLoading(false);
         console.error("Error fetching article: ", error);

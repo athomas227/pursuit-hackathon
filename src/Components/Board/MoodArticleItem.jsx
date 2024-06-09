@@ -3,9 +3,9 @@ import axios from "axios";
 
 const MoodArticleItem = ({ article }) => {
   const [articleData, setArticleData] = useState({ content: "", imageUrl: "" });
-  const headline = article.article.split(":")[0] || "No Title";
-  const snippet = article.article.split(":")[1] || "No Snippet";
-  const web_url = article.url || "#";
+
+  // Destructure the properties directly from the article object
+  const { article: headline, snippet, web_url } = article;
 
   useEffect(() => {
     const fetchArticleData = async () => {
@@ -15,7 +15,7 @@ const MoodArticleItem = ({ article }) => {
             url: web_url,
           },
         });
-        console.log(response.data);
+        // console.log(response.data);
         setArticleData(response.data);
       } catch (error) {
         console.error("Error fetching article data:", error);
@@ -29,7 +29,7 @@ const MoodArticleItem = ({ article }) => {
 
   return (
     <div className="mood-item">
-      <img src={articleData} alt="article image" />
+      {articleData && <img src={articleData} alt="article image" />}
       <h2>{headline}</h2>
       <p>{snippet}</p>
       <a href={web_url} target="_blank" rel="noopener noreferrer">

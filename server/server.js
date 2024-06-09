@@ -17,12 +17,13 @@ app.get('/api/article-content', async (req, res) => {
       // Find the first image element on the page
       const imageElement = document.querySelector('img');
       const imageUrl = imageElement ? imageElement.src : null;
-
+        // console.log(imageUrl);
       return { imageUrl };
     });
-
-    await browser.close();
+    // console.log(articleData);
     res.json(articleData.imageUrl);
+    await browser.close();
+    
   } catch (error) {
     console.error('Error fetching article content:', error);
     res.status(500).json({ error: 'Error fetching article content' });
